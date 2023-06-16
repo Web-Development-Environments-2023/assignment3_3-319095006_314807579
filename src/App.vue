@@ -19,9 +19,8 @@
         </b-dropdown>|
         <b-button @click=showModal>New Recipe</b-button>|
         <b-modal v-model="modalVisible" title="Add a New Recipe">
-          
-          <NewRecipe ref="NewRecipe"></NewRecipe>
 
+          <NewRecipe ref="NewRecipe"></NewRecipe>
           <template #modal-footer>
             <b-button @click="hideModal">Close</b-button>
             <b-button @click="onSave">Save</b-button>

@@ -9,7 +9,7 @@
             <div class="h-search-form">
               <form action="#">
                   <input type="search" class="form-control" placeholder="type your keyboard">
-                  <button><i class="bi bi-search"></i></button>
+                  <button @click="search"><i class="bi bi-search"></i></button>
             </form>
             </div>
           </div>
@@ -22,7 +22,36 @@
 <script>
 import 'bootstrap-icons/font/bootstrap-icons.css';
 export default {
+  name: "SearchPage",
+  data() {
+    return {
+      form: {
+        search: "",
+        submitError: undefined
+      },
+      validated: false
+    };
+  },
+  methods: {
+    async search() {
+      try {
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/recipes/search/" + this.form.search
+        );
+        console.log(response.data)
+        const recipes = response.data;
+        this.recipes = [];
+        this.recipes.push(...recipes);
+        this.$router.push("/recipes/search_results");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 }
+
+
+
 </script>
 
 <style >
