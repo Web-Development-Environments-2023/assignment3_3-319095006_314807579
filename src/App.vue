@@ -19,10 +19,12 @@
         </b-dropdown>|
         <b-button @click=showModal>New Recipe</b-button>|
         <b-modal v-model="modalVisible" title="Add a New Recipe">
-          <NewRecipe />
+          
+          <NewRecipe ref="NewRecipe"></NewRecipe>
+
           <template #modal-footer>
             <b-button @click="hideModal">Close</b-button>
-            <b-button @click="saveRecipe">Save</b-button>
+            <b-button @click="onSave">Save</b-button>
           </template>
         </b-modal>
 
@@ -48,6 +50,9 @@ export default {
     };
   },
   methods: {
+    onSave(){
+      this.$refs.NewRecipe.saveRecipe();
+    },
     Logout() {
       this.$root.store.logout();
       this.$root.toast("Logout", "User logged out successfully", "success");

@@ -61,13 +61,10 @@
             >
             <b-form-checkbox
                 id="vegetarian"
-                v-model="isChecked"
+                v-model="vegetarian_isChecked"
                 type="checkbox"
                 :state="validateState('vegetarian')"
             >vegetarian</b-form-checkbox>
-            <b-form-invalid-feedback v-if="!$v.form.vegetarian.required">
-                Vegetarian is required
-            </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group
                 id="input-group-vegan"
@@ -77,13 +74,10 @@
             >
             <b-form-checkbox
                 id="vegan"
-                v-model="$v.form.vegan.$model"
+                v-model="vegan_isChecked"
                 type="checkbox"
                 :state="validateState('vegan')"
             >vegan</b-form-checkbox>
-            <b-form-invalid-feedback v-if="!$v.form.vegan.required">
-                Vegan is required
-            </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group
                 id="input-group-gluten_free"
@@ -93,13 +87,10 @@
             >
             <b-form-checkbox
                 id="gluten_free"
-                v-model="$v.form.gluten_free.$model"
+                v-model="gluten_free_isChecked"
                 type="checkbox"
                 :state="validateState('gluten_free')"
             >gluten free</b-form-checkbox>
-            <b-form-invalid-feedback v-if="!$v.form.gluten_free.required">
-                Gluten Free is required
-            </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group
                 id="input-group-ingredients"
@@ -154,6 +145,13 @@
         
             </b-form-group>
         </b-form>
+        <b-alert
+        class="mt-2"
+        v-if="form.submitError"
+        variant="warning"
+        dismissible
+        show
+        >recipe save failed:{{ form.submitError }}</b-alert>
     </div>
 </template>
 
@@ -174,6 +172,9 @@ export default {
     name: "NewRecipe",
     data() {
         return {
+            vegetarian_isChecked:false,
+            gluten_free_isChecked:false,
+            vegan_isChecked:false,
             form: {
                 recipeName: "",
                 Image: "",
@@ -183,7 +184,8 @@ export default {
                 gluten_free: "",
                 ingredients: "",
                 instructions: "",
-                meals: ""
+                meals: "",
+                submitError:undefined
             },
             errors: [],
             validated: false,
@@ -194,6 +196,29 @@ export default {
         validateState(param) {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
+        },
+        async saveRecipe(){
+            this.$v.form.$touch();
+            if (this.$v.form.$anyError) {
+                return;
+            }
+            try{
+                const response=await this.axios.post(this.$root.store.server_domain + "/users/newRecipe", {
+                    title: this.form.recipeName,
+                    image: this.form.Image,
+                    readyInMinutes: this.form.readyInMinutes,
+                    vegetarian: this.form.vegetarian,
+                    vegan: this.form.vegan,
+                    gluten_free: this.form.gluten_free,
+                    ingredients:this.form.ingredients ,
+                    instructions:this.form.instructions ,
+                    meals:this.form.meals 
+                })
+            }
+            catch(err){
+                console.log(err.response);
+                this.form.submitError=err.response.data.message;
+            }
         }
     },
     validations:
@@ -211,13 +236,13 @@ export default {
                 
             },
             vegetarian: {
-                required
+                
             },
             vegan: {
-                required
+                
             },
             gluten_free: {
-                required
+                
                 
             },
             ingredients: {
