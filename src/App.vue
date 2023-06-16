@@ -51,6 +51,7 @@ export default {
   methods: {
     onSave(){
       this.$refs.NewRecipe.saveRecipe();
+      this.hideModal();
     },
     Logout() {
       this.$root.store.logout();

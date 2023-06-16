@@ -9,7 +9,7 @@ Vue.use(VueRouter);
 import VueCookies from "vue-cookies";
 Vue.use(VueCookies);
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 const router = new VueRouter({
   routes,

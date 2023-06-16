@@ -172,9 +172,7 @@ export default {
     name: "NewRecipe",
     data() {
         return {
-            vegetarian_isChecked:false,
-            gluten_free_isChecked:false,
-            vegan_isChecked:false,
+    
             form: {
                 recipeName: "",
                 Image: "",
@@ -189,7 +187,9 @@ export default {
             },
             errors: [],
             validated: false,
-            isChecked: false
+            vegetarian_isChecked:false,
+            gluten_free_isChecked:false,
+            vegan_isChecked:false
         };
     },
     methods: {
@@ -203,13 +203,16 @@ export default {
                 return;
             }
             try{
+                const user_name = localStorage.getItem("username")
+                console.log(user_name)
                 const response=await this.axios.post(this.$root.store.server_domain + "/users/newRecipe", {
+                    username: user_name,
                     title: this.form.recipeName,
                     image: this.form.Image,
                     readyInMinutes: this.form.readyInMinutes,
-                    vegetarian: this.form.vegetarian,
-                    vegan: this.form.vegan,
-                    gluten_free: this.form.gluten_free,
+                    vegetarian: this.vegetarian_isChecked,
+                    vegan: this.vegan_isChecked,
+                    gluten_free: this.gluten_free_isChecked,
                     ingredients:this.form.ingredients ,
                     instructions:this.form.instructions ,
                     meals:this.form.meals 
@@ -219,6 +222,7 @@ export default {
                 console.log(err.response);
                 this.form.submitError=err.response.data.message;
             }
+            
         }
     },
     validations:
