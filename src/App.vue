@@ -3,14 +3,29 @@
     <div id="nav">
       <router-link :to="{ name: 'main' }">Vue Recipes</router-link>|
       <router-link :to="{ name: 'search' }">Search</router-link>|
+      <router-link :to="{ name: 'about' }">About</router-link>|
       {{ !$root.store.username }}
       <span v-if="!$root.store.username">
-        Guest:
+        Hello Guest:
         <router-link :to="{ name: 'register' }">Register</router-link>|
         <router-link :to="{ name: 'login' }">Login</router-link>|
       </span>
       <span v-else>
         {{ $root.store.username }}: <button @click="Logout">Logout</button>|
+        <b-dropdown text="Personal">
+          <b-dropdown-item :to="{ name: 'myRecipes' }">My Recipes</b-dropdown-item>
+          <b-dropdown-item :to="{ name: 'myFavorites' }">My Favorites</b-dropdown-item>
+          <b-dropdown-item :to="{name: 'myFamilyRecipes'}"> My Family Recipes</b-dropdown-item>
+        </b-dropdown>|
+        <b-button @click=showModal>New Recipe</b-button>|
+        <b-modal v-model="modalVisible" title="Add a New Recipe">
+          <NewRecipe />
+          <template #modal-footer>
+            <b-button @click="hideModal">Close</b-button>
+            <b-button @click="saveRecipe">Save</b-button>
+          </template>
+        </b-modal>
+
       </span>
     </div>
     <router-view />
@@ -18,8 +33,20 @@
 </template>
 
 <script>
+import { BModal } from 'bootstrap-vue';
+import NewRecipe from "./components/NewRecipe";
 export default {
   name: "App",
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    BModal,
+    NewRecipe
+  },
+  data() {
+    return {
+      modalVisible: false,
+    };
+  },
   methods: {
     Logout() {
       this.$root.store.logout();
@@ -28,9 +55,16 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+    },
+    showModal() {
+      this.modalVisible = true;
+    },
+    hideModal() {
+      this.modalVisible = false;
     }
-  }
+}
 };
+
 </script>
 
 <style lang="scss">
