@@ -10,24 +10,28 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+              <div v-if="this.fromRoute!='/users/myRecipes'">Likes: {{ recipe.aggregateLikes }} likes</div>
             </div>
             Ingredients:
             <ul>
-              <li
-                v-for="(r, index) in recipe.extendedIngredients"
+              <!-- <li
+                v-for="(r, index) in recipe.ingredients"
                 :key="index + '_' + r.id"
               >
                 {{ r.original }}
-              </li>
+              </li> -->
+              <li>                
+                {{ recipe.ingredients }}
+            </li>
             </ul>
           </div>
           <div class="wrapped">
             Instructions:
             <ol>
-              <li v-for="s in recipe._instructions" :key="s.number">
+              <!-- <li v-for="s in recipe.instructions" :key="s.number">
                 {{ s.step }}
-              </li>
+              </li> -->
+              {{ recipe.instructions }}
             </ol>
           </div>
         </div>
@@ -62,7 +66,7 @@ export default {
         try {
           response = await this.axios.get(
             // "https://test-for-3-2.herokuapp.com/recipes/info",
-            this.$root.store.server_domain + "/recipes",
+            this.$root.store.server_domain + "/recipes/",
             {
               params: { id: this.$route.params.recipeId }
             }
@@ -77,10 +81,10 @@ export default {
         }
 
         let {
-          analyzedInstructions,
+          // analyzedInstructions,
           instructions,
-          extendedIngredients,
-          aggregateLikes,
+          ingredients,
+          popularity,
           readyInMinutes,
           image,
           title
@@ -97,8 +101,8 @@ export default {
           instructions,
           _instructions,
           analyzedInstructions,
-          extendedIngredients,
-          aggregateLikes,
+          ingredients,
+          popularity,
           readyInMinutes,
           image,
           title
@@ -117,11 +121,12 @@ export default {
         try {
           const username = localStorage.getItem("username");
           response = await this.axios.get(
-            // "https://test-for-3-2.herokuapp.com/recipes/info",
-            this.$root.store.server_domain + "/users",
-            {
-              params: { id: this.$route.params.recipeId, username: username }
+            this.$root.store.server_domain + "/users/"+ this.$route.params.recipeId,{
+            params: {
+              username: username
             }
+          }
+                      
           );
 
           // console.log("response.status", response.status);
@@ -131,7 +136,7 @@ export default {
           this.$router.replace("/NotFound");
           return;
         }
-        console.log(response.data);
+        this.recipe=response.data[0];
 
 
     }catch (error) {

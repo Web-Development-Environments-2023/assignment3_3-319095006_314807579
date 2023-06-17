@@ -11,7 +11,9 @@
                 <b-form >
                   <input v-model="selected_query" type="search" class="form-control" placeholder="type your keyboard">
                   <button @click="search"><i class="bi bi-search"></i></button>
+                  <b-card id="options">
                   <b-form-group 
+                    class="mt-2"
                     id="input-group-cuisine"
                     label-cols-sm="8"
                     label="Cuisine:"
@@ -63,14 +65,17 @@
                     id="input-group-sort"
                     label-cols-sm="8"
                     label="Would you like to sort?:"
-                    label-for="None"
+                    label-for="sort_option"
                   >
                     <b-form-select
                       id="sort_option"
                       v-model="selected_sort"
                       :options="sort_option"
-                    ></b-form-select>
+                      
+                    >
+                    </b-form-select>
                   </b-form-group>
+                </b-card>
                 </b-form>
             </form>
             <div v-if="recipes.length > 0">
@@ -219,12 +224,25 @@ margin-bottom: 30px;
 .h-search-form button:hover{
   background-color: blue;
 }
-#input-group-cuisine{
+/* #input-group-cuisine{
   padding-top: 60px;
   align-self: start;
+} */
+#options{
   
-  
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 20px;
+  text-align: left;
+  background-color: cadetblue;
+  width: 50%;
+  margin-left: 25%;
+  border: none;
+
 }
+
+
 
 
 </style>
