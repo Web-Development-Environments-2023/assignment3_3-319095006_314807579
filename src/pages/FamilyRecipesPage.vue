@@ -1,18 +1,31 @@
 <template>
     <div id="container">
         <h3>Family Recipes</h3>
+    <div v-if="recipes.length <= 0">
+        <p>No recipes found</p>
+    </div>
+    <div v-else>
     <b-row>
-        <b-col v-for="r in recipes" :key="r.id">
-            <b-card>
-                <h4>"r.name"</h4>
-                <p>"r.family_member"</p>
-                <p>"r.holiday"</p>
-                <p>"r.image"</p>
-                <p>"r.ingredients"</p>
-                <p>"r.instructions"</p>
-            </b-card>
-        </b-col>
-    </b-row>
+            <b-col v-for="r in recipes" :key="r.id">
+                <b-card>
+                    <div class="recipe-body">
+                        <img v-if="image_load" :src="r.image" class="recipe-image" />
+                        </div>
+                        <div class="recipe-footer">
+                        <div :title="r.name" class="recipe-title">
+                            {{ r.name }}
+                        </div>
+                        <ul class="recipe-overview">
+                            <li>Holiday : {{ r.holiday }} </li>
+                            <li>Family member: {{ r.family_member }} likes</li>
+                            <li>Ingredients: {{ r.ingredients }}</li>
+                            <li>Instructions: {{ r.instructions }}</li>
+                        </ul>
+                        </div>
+                </b-card>
+            </b-col>
+        </b-row>
+    </div>  
 </div>
 </template>
 
@@ -41,8 +54,13 @@
         {
             async updateRecipes() {
             try {
+                const username = localStorage.getItem("username");
                 const response = await this.axios.get(
-                this.$root.store.server_domain + "/users/myFamilyRecipes"
+                this.$root.store.server_domain + "/users/myFamilyRecipes", {
+                    params: {
+                    username: username
+                    }
+                }
                 );
                 console.log(response.data)
                 const recipes = response.data;

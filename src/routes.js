@@ -55,9 +55,10 @@ const routes = [
     component: NotFound,
   },
   {
-    path: "/search_result_page",
-    name:"search_result_page",
-    component:() => import("./pages/SearchResultPage")
+    path: "recipes/fullview",
+    name: "recipe",
+    component: () => import("./pages/RecipeViewPage"),
+
   }
 ];
 

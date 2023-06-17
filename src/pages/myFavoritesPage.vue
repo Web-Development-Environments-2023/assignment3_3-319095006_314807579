@@ -32,8 +32,13 @@ export default {
     {
         async updateRecipes() {
         try {
+            const username = localStorage.getItem("username");
             const response = await this.axios.get(
-            this.$root.store.server_domain + "/users/favorites"
+            this.$root.store.server_domain + "/users/favorites", {
+                params: {
+                  username: username
+                }
+            }
             );
             console.log(response.data)
             const recipes = response.data;

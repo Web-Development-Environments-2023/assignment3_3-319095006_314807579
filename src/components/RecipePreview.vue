@@ -1,6 +1,7 @@
 <template>
+  <div class="container">
   <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+    :to="{ name: 'recipe', params: { recipeId: recipe.id, from: fromRoute } }"
     class="recipe-preview"
   >
     <div class="recipe-body">
@@ -12,13 +13,29 @@
       </div>
       <ul class="recipe-overview">
         <li>{{ recipe.readyInMinutes }} minutes</li>
-        <li>{{ recipe.aggregateLikes }} likes</li>
+        <li>{{ recipe.popularity }} likes</li>
       </ul>
     </div>
+    <div v-if="recipe.vegan===true" class="vegan">
+      <i class="bi bi-leaf-fill"></i>
+    </div>
+    <div v-if="recipe.vegetarian===true" class="vegetarian">
+      <i class="bi bi-dot"></i>
+    </div>
+    <div v-if="recipe.gluten_free===true" class="glutenFree">
+      <i class="bi bi-circle-fill"></i>
+    </div>
   </router-link>
+  <div v-if="fromRoute!='/users/myRecipes'">
+    <button @click="toggle_favorite" style="padding-top: 10px;">
+          <i :class="recipe.favorite ? 'bi bi-star-fill' : 'bi bi-star'" style="size: 0.5px;"></i>
+    </button>
+  </div>
+</div>
 </template>
 
 <script>
+import 'bootstrap-icons/font/bootstrap-icons.css';
 export default {
   mounted() {
     this.axios.get(this.recipe.image).then((i) => {
@@ -27,8 +44,14 @@ export default {
   },
   data() {
     return {
-      image_load: false
+      image_load: false,
+      isFavorite: false,
+      fromRoute: this.$route.path
     };
+  },
+  mounted() {
+    console.log("from: ",this.fromRoute);
+    
   },
   props: {
     recipe: {
@@ -36,29 +59,70 @@ export default {
       required: true
     },
 
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
+    id: {
+      type: Number,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    readyInMinutes: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
+    popularity: {
+      type: Number,
+      required: false,
+      
+      default() {
+        return undefined;
+      }
+    },
+    favorite: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false;
+      }
+    },
+    vegan: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false;
+      }
+    },
+    vegetarian: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false;
+      }
+    },
+    gluten_free: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false;
+      }
+    }
+  },
+  methods: {
+    toggle_favorite() {
+      // this.isFavorite = !this.isFavorite;
+      const response = this.axios.post(
+        this.$root.store.server_domain + "/users/favorites",
+        {
+          username: localStorage.getItem("username"),
+          recipe_id: this.recipe.id
+        }
+      );
+    }
   }
 };
 </script>

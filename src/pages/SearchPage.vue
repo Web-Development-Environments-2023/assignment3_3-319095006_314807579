@@ -73,6 +73,13 @@
                   </b-form-group>
                 </b-form>
             </form>
+            <div v-if="recipes.length > 0">
+              <b-row>
+                <b-row v-for="r in recipes" :key="r.id" >
+                  <RecipePreview class="recipePreview" :recipe="r" />
+                </b-row>
+              </b-row>
+            </div>
             </div>
           </div>
         </div>
@@ -86,24 +93,28 @@ import diets from '../assets/diets';
 import cuisine from '../assets/cuisine';
 import intolerances from '../assets/intolerances';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import RecipePreview from '../components/RecipePreview.vue';
 export default {
   name: "SearchPage",
   data() {
-
     return {
       validated: false,
       diet:[],
       cuisine:[],
       intolerances:[],
-      selcted_cuisine:"",
-      selected_diet:"",
-      selected_intolerance:"",
+      selcted_cuisine: null,
+      selected_diet: null,
+      selected_intolerance:null,
       num_options:[5,10,15],
       selected_num:'',
       sort_option:['time','popularity'],
-      selected_sort:"",
-      selected_query:""
+      selected_sort:null,
+      selected_query:"",
+      recipes: []
     };
+  },
+  components: {
+    RecipePreview
   },
   mounted(){
     this.diet.push(...diets)
@@ -128,7 +139,8 @@ export default {
         const recipes = response.data;
         this.recipes = [];
         this.recipes.push(...recipes);
-        this.$router.push({path:"/search_result_page",query:{recipes:JSON.stringify(recipes)}})
+        console.log(this.recipes)
+        // this.$router.push({path:"/search_result_page",params:{recipes:this.recipes}})
       } catch (error) {
         console.log(error);
       }

@@ -45,65 +45,100 @@
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
+      fromRoute: this.$route.params.from
     };
   },
+  mounted() {
+    console.log("from: ",this.fromRoute);
+    
+  },
   async created() {
-    try {
-      let response;
-      // response = this.$route.params.response;
-
+    if (this.fromRoute != "/users/myRecipes") {
       try {
-        response = await this.axios.get(
-          // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/info",
-          {
-            params: { id: this.$route.params.recipeId }
-          }
-        );
+        let response;
+        // response = this.$route.params.response;
 
-        // console.log("response.status", response.status);
-        if (response.status !== 200) this.$router.replace("/NotFound");
+        try {
+          response = await this.axios.get(
+            // "https://test-for-3-2.herokuapp.com/recipes/info",
+            this.$root.store.server_domain + "/recipes",
+            {
+              params: { id: this.$route.params.recipeId }
+            }
+          );
+
+          // console.log("response.status", response.status);
+          if (response.status !== 200) this.$router.replace("/NotFound");
+        } catch (error) {
+          console.log("error.response.status", error.response.status);
+          this.$router.replace("/NotFound");
+          return;
+        }
+
+        let {
+          analyzedInstructions,
+          instructions,
+          extendedIngredients,
+          aggregateLikes,
+          readyInMinutes,
+          image,
+          title
+        } = response.data.recipe;
+
+        let _instructions = analyzedInstructions
+          .map((fstep) => {
+            fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+            return fstep.steps;
+          })
+          .reduce((a, b) => [...a, ...b], []);
+
+        let _recipe = {
+          instructions,
+          _instructions,
+          analyzedInstructions,
+          extendedIngredients,
+          aggregateLikes,
+          readyInMinutes,
+          image,
+          title
+        };
+
+        this.recipe = _recipe;
       } catch (error) {
-        console.log("error.response.status", error.response.status);
-        this.$router.replace("/NotFound");
-        return;
+        console.log(error);
       }
-
-      let {
-        analyzedInstructions,
-        instructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title
-      } = response.data.recipe;
-
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
-          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          return fstep.steps;
-        })
-        .reduce((a, b) => [...a, ...b], []);
-
-      let _recipe = {
-        instructions,
-        _instructions,
-        analyzedInstructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title
-      };
-
-      this.recipe = _recipe;
-    } catch (error) {
-      console.log(error);
     }
+    else {
+      try {
+        let response;
+        // response = this.$route.params.response;
+
+        try {
+          const username = localStorage.getItem("username");
+          response = await this.axios.get(
+            // "https://test-for-3-2.herokuapp.com/recipes/info",
+            this.$root.store.server_domain + "/users",
+            {
+              params: { id: this.$route.params.recipeId, username: username }
+            }
+          );
+
+          // console.log("response.status", response.status);
+          if (response.status !== 200) this.$router.replace("/NotFound");
+        } catch (error) {
+          console.log("error.response.status", error.response.status);
+          this.$router.replace("/NotFound");
+          return;
+        }
+        console.log(response.data);
+
+
+    }catch (error) {
+        console.log(error);
+      }
   }
-};
+}};
 </script>
 
 <style scoped>
