@@ -54,6 +54,11 @@ const routes = [
     name: "notFound",
     component: NotFound,
   },
+  {
+    path: "/search_result_page",
+    name:"search_result_page",
+    component:() => import("./pages/SearchResultPage")
+  }
 ];
 
 export default routes;
