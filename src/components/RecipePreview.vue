@@ -22,8 +22,11 @@
     <div v-if="recipe.vegetarian===true" class="vegetarian">
       <i class="bi bi-dot"></i>
     </div>
-    <div v-if="recipe.gluten_free===true" class="glutenFree">
+    <div v-if="recipe.gluten_free" class="glutenFree">
       <i class="bi bi-circle-fill"></i>
+    </div>
+    <div v-if="recipe.viewed" class="viewed">
+      <i class="bi bi-eye-fill"></i>
     </div>
   </router-link>
   <div v-if="fromRoute!='/users/myRecipes'">
@@ -105,6 +108,13 @@ export default {
       }
     },
     gluten_free: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false;
+      }
+    },
+    viewed: {
       type: Boolean,
       required: false,
       default() {
