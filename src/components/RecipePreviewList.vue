@@ -2,13 +2,13 @@
   <b-container>
     <h3>
       {{ title }}:
-      <slot></slot>
+      
     </h3>
-    <b-row v-if="recipes.length !=0 ">
-      <b-col v-for="r in recipes" :key="r.id">
-        <RecipePreview class="recipePreview" :recipe="r" />
-      </b-col>
-    </b-row>
+    <div v-if="recipes">
+    <div v-for="r in recipes" :key="r.id" >
+      <RecipePreview class="recipePreview" :recipe="r" />
+    </div>
+  </div>
   </b-container>
 </template>
 
@@ -36,6 +36,7 @@ export default {
     if (this.random==="true") {
       console.log("random");
       this.updateRecipes();
+      console.log(this.recipes)
     }
     else{
       this.getLastViewedRecipes();
@@ -59,8 +60,10 @@ export default {
         const recipes = response.data;
         this.recipes = [];
         this.recipes.push(...recipes);
+        console.log(this.recipes)
       } catch (error) {
         console.log(error);
+        this.recipes=[]
       }
     },
     async getLastViewedRecipes(){

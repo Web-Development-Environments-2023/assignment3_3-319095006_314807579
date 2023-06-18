@@ -93,6 +93,7 @@ export default {
   font-family: 'poppins',sans-serif;
   text-decoration: none;
   list-style: none;
+
   
 }
 :root{
@@ -101,13 +102,13 @@ export default {
   --main-color:#29fd53;
 }
 
-// #body{
-//   min-height: 100vh;
-//   background: var(--bg-color);
-//   color: var(--text-color);
+#body{
+  min-height: 100vh;
+  background: var(--bg-color);
+  color: var(--text-color);
 
   
-// }
+}
 .header{
   position: fixed;
   height: 10%;

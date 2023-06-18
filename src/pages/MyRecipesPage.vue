@@ -1,11 +1,11 @@
 <template>
-    <b-container>
+    <b-container id="cont">
         <h3>My Recipes</h3>
-      <b-row>
-        <b-col v-for="r in recipes" :key="r.id">
-          <RecipePreview class="recipePreview" :recipe="r" />
-        </b-col>
-      </b-row>
+        <b-card-group deck class="recipes">
+          <b-col v-for="r in recipes" :key="r.id">
+            <RecipePreview class="recipePreview" :recipe="r" />
+          </b-col>
+      </b-card-group>
     </b-container>
   </template>
 
@@ -53,4 +53,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.recipes{
+  display: flex;
+  flex-direction:column ;
+}
 </style>
