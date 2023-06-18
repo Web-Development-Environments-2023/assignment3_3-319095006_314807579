@@ -2,6 +2,7 @@
   <section class="hero-area">
     <div class="container">
       <div class="row">
+        <button @click="getLastSearch">Last Search</button>
         <div class="col-lg-8 offset-lg-2 text-center">
           <div class="hero-caption">
             <h2>Search your next recipe!</h2>
@@ -12,6 +13,7 @@
                   <input v-model="selected_query" type="search" class="form-control" placeholder="type your keyboard">
                   <button @click="search"><i class="bi bi-search"></i></button>
                   <b-card id="options">
+
                   <b-form-group 
                     class="mt-2"
                     id="input-group-cuisine"
@@ -75,7 +77,9 @@
                     >
                     </b-form-select>
                   </b-form-group>
+                  
                 </b-card>
+
                 </b-form>
             </form>
             <div v-if="recipes.length > 0">
@@ -145,13 +149,30 @@ export default {
         this.recipes = [];
         this.recipes.push(...recipes);
         console.log(this.recipes)
+        if (localStorage.getItem("username")!=null){
+          localStorage.setItem("last_search",this.selected_query, this.selected_num, this.selcted_cuisine, this.selcted_diet, this.selected_intolerance, this.selected_sort)
+        }
         // this.$router.push({path:"/search_result_page",params:{recipes:this.recipes}})
       } catch (error) {
         console.log(error);
       }
+    },
+    async getLastSearch(){
+      if (localStorage.getItem("username")==null){
+        const search = localStorage.getItem("last_search")
+        this.query = search[0]
+        this.selected_num = search[1]
+        this.selcted_cuisine = search[2]
+        this.selcted_diet = search[3]
+        this.selected_intolerance = search[4]
+        this.selected_sort = search[5]
+        this.search()
+  
     }
+
   }
 }
+};
 
 
 
