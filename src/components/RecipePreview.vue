@@ -29,7 +29,7 @@
       <i class="bi bi-eye-fill"></i>
     </div>
   </router-link>
-  <div v-if="fromRoute!='/users/myRecipes'">
+  <div v-if="fromRoute!='/users/myRecipes' && recipe.length >0">
     <button @click="toggle_favorite" style="padding-top: 10px;">
           <i :class="recipe.favorite ? 'bi bi-star-fill' : 'bi bi-star'" style="size: 0.5px;"></i>
     </button>

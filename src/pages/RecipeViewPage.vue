@@ -10,19 +10,20 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div v-if="this.fromRoute!='/users/myRecipes'">Likes: {{ recipe.aggregateLikes }} likes</div>
+              <div v-if="this.fromRoute!='/users/myRecipes'">Likes: {{ recipe.popularity }} likes</div>
             </div>
             Ingredients:
             <ul>
-              <!-- <li
-                v-for="(r, index) in recipe.ingredients"
-                :key="index + '_' + r.id"
+              <li
+                v-for="(sentence, index) in ingredientsArray"
+                :key="index"
+                
               >
-                {{ r.original }}
-              </li> -->
-              <li>                
+              {{ sentence }} 
+              </li>
+              <!-- <li>                
                 {{ recipe.ingredients }}
-            </li>
+            </li> -->
             </ul>
           </div>
           <div class="wrapped">
@@ -53,6 +54,11 @@ export default {
       fromRoute: this.$route.params.from
     };
   },
+  computed: {
+    ingredientsArray() {
+      return this.recipe.ingredients.split(',').filter(sentence => sentence.trim() !== '');
+    }
+  },
   mounted() {
     console.log("from: ",this.fromRoute);
     
@@ -66,15 +72,28 @@ export default {
         try {
           response = await this.axios.get(
             // "https://test-for-3-2.herokuapp.com/recipes/info",
-            this.$root.store.server_domain + "/recipes/",
-            {
-              params: { id: this.$route.params.recipeId }
-            }
+            this.$root.store.server_domain + "/recipes/" + this.$route.params.recipeId,
           );
 
           // console.log("response.status", response.status);
           if (response.status !== 200) this.$router.replace("/NotFound");
-        } catch (error) {
+          else{
+            if (localStorage.getItem("username") !== null){
+              try{
+                const response_viewed = await this.axios.post(
+                  this.$root.store.server_domain + "/users/addLastViewed",{
+                    recipeId: this.$route.params.recipeId,
+                    username: localStorage.getItem("username")
+                  }
+                )
+                console.log(response_viewed)
+                
+              }catch(error){
+                console.log(error)
+                return
+              }
+          }
+        }} catch (error) {
           console.log("error.response.status", error.response.status);
           this.$router.replace("/NotFound");
           return;
@@ -87,25 +106,27 @@ export default {
           popularity,
           readyInMinutes,
           image,
-          title
-        } = response.data.recipe;
+          title,
+          meals
+        } = response.data;
 
-        let _instructions = analyzedInstructions
-          .map((fstep) => {
-            fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-            return fstep.steps;
-          })
-          .reduce((a, b) => [...a, ...b], []);
+        // let _instructions = analyzedInstructions
+        //   .map((fstep) => {
+        //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+        //     return fstep.steps;
+        //   })
+        //   .reduce((a, b) => [...a, ...b], []);
 
         let _recipe = {
           instructions,
-          _instructions,
-          analyzedInstructions,
+          // _instructions,
+          // analyzedInstructions,
           ingredients,
           popularity,
           readyInMinutes,
           image,
-          title
+          title,
+          meals
         };
 
         this.recipe = _recipe;
