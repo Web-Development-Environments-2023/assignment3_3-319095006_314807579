@@ -2,12 +2,15 @@
  <div class="container"> 
     <h1 class="title" >All recipes in one place</h1>
     <b-row class="container">
-    <b-col>
+    <b-col style="width: 50%;">
+      <div>
+        <button @click="updateRecipes"> new random recipes</button>
+      </div>
       <RecipePreviewList title="Random Recipes" class="RandomRecipes center" random="true"></RecipePreviewList>
     </b-col>
-    <b-col>
+    <b-col style="width: 50%;">
       <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to vue this</router-link>
-        <RecipePreviewList
+        <RecipePreviewList style="width: 100%; height: 100%;"
           title="Last Viewed Recipes"
           random="false"
           :class="{
@@ -16,7 +19,7 @@
             center: true
           }"
           disabled
-        ></RecipePreviewList>
+        ></RecipePreviewList >
     </b-col>
   </b-row>
 </div>
@@ -28,7 +31,10 @@ export default {
   components: {
     RecipePreviewList
   }
+  
 };
+
+
 </script>
 
 <style lang="scss" scoped>

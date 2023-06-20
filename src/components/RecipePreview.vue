@@ -44,7 +44,7 @@
             </div>
             <div >
               <button @click="toggle_favorite" style="background: none; border: none;">
-                    <i :class="recipe.favorite ? 'bi bi-star-fill' : 'bi bi-star'" style="size: 0.5px;"></i>
+                    <i :class="recipe.favorite ? 'bi bi-star-fill' : 'bi bi-star'" style="size: 20px;"></i>
               </button>
             </div>
           </b-col>
@@ -59,21 +59,18 @@
 <script>
 import 'bootstrap-icons/font/bootstrap-icons.css';
 export default {
-  // mounted() {
-  //   this.axios.get(this.recipe.image).then((i) => {
-  //     this.image_load = true;
-  //   });
-  // },
+  mounted() {
+    // if(this.$route.path == '/')
+    this.axios.get(this.recipe.image).then((i) => {
+      this.image_load = true;
+    });
+  },
   data() {
     return {
       image_load: false,
       isFavorite: false,
       fromRoute: this.$route.path
     };
-  },
-  mounted() {
-    console.log("from: ",this.fromRoute);
-    console.log(this.recipe.vegetarian)
   },
   props: {
     recipe: {
@@ -142,18 +139,24 @@ export default {
     // }
   },
   methods: {
-    toggle_favorite() {
-      // this.isFavorite = !this.isFavorite;
-      const response = this.axios.post(
-        this.$root.store.server_domain + "/users/favorites",
+    async toggle_favorite() {
+      console.log("recipeID: "+ this.recipe.id)
+      const user_name = localStorage.getItem("username")
+      console.log(user_name)
+      try{
+        const response = await this.axios.post(this.$root.store.server_domain + "/users/favorites",
         {
-          username: localStorage.getItem("username"),
-          recipe_id: this.recipe.id
-        }
+          username:user_name,
+          recipeId: this.recipe.id
+        },{withCredentials:true}
+        
       );
+      
+    }catch(err){
+            
     }
   }
-};
+}};
 </script>
 
 <style scoped>
@@ -238,18 +241,22 @@ export default {
 #inst{
   font-size: 1.3rem;
   margin-bottom: 10px;
-  color: black;
+  color: #fff;
 }
  i{
   font-size: 0.7rem;
-  color: black;
+  color: #fff;
 }
 .overflow-hidden{
-  height: 250px;
-  width: 500px;
-  margin: 50px;
-  display: flex;
+  height: 100%;
+  width: 100%;
+  margin: 70px;
+  display: relative;
   flex-wrap: wrap;
+  background-color: #222327;
+ 
+  
 }
+
 
 </style>

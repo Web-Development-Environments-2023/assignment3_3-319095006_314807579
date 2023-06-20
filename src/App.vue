@@ -104,7 +104,7 @@ export default {
 
 #body{
   min-height: 100vh;
-  background: var(--bg-color);
+  background: cadetblue;
   color: var(--text-color);
 
   
@@ -149,7 +149,7 @@ export default {
   
 }
 #page_div{
-  margin-top: 120px;
+  margin-top: 90px;
   height: 90%;
 }
 .user{

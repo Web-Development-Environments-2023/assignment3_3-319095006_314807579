@@ -2,18 +2,17 @@
   <section class="hero-area">
     <div class="container">
       <div class="row">
-        <button @click="getLastSearch">Last Search</button>
         <div class="col-lg-8 offset-lg-2 text-center">
           <div class="hero-caption">
             <h2>Search your next recipe!</h2>
             <p>Over a milion recipes, just choose one</p>
+
             <div class="h-search-form">
               <form action="#">
                 <b-form >
                   <input v-model="selected_query" type="search" class="form-control" placeholder="type your keyboard">
-                  <button @click="search"><i class="bi bi-search"></i></button>
+                  <button @click="search" class="s_btn"><i class="bi bi-search"></i></button>  
                   <b-card id="options">
-
                   <b-form-group 
                     class="mt-2"
                     id="input-group-cuisine"
@@ -79,9 +78,11 @@
                   </b-form-group>
                   
                 </b-card>
-
+                
                 </b-form>
+                
             </form>
+            
             <div v-if="recipes.length > 0">
               <b-row>
                 <b-row v-for="r in recipes" :key="r.id" >
@@ -94,6 +95,7 @@
         </div>
       </div>
     </div>
+    <button id="last_btn" @click="getLastSearch">Last Search</button>
   </section>
 </template>
 
@@ -119,7 +121,8 @@ export default {
       sort_option:['time','popularity'],
       selected_sort:null,
       selected_query:"",
-      recipes: []
+      recipes: [],
+      searchData:[]
     };
   },
   components: {
@@ -150,7 +153,15 @@ export default {
         this.recipes.push(...recipes);
         console.log(this.recipes)
         if (localStorage.getItem("username")!=null){
-          localStorage.setItem("last_search",this.selected_query, this.selected_num, this.selcted_cuisine, this.selcted_diet, this.selected_intolerance, this.selected_sort)
+          
+          searchData.push(this.selected_query)
+          searchData.push(this.selected_num)
+          searchData.push(this.selected_cuisine)
+          searchData.push(this.selected_diet)
+          searchData.push(this.selcted_intolerance)
+          searchData.push(this.selected_sort)
+          console.log(searchData)
+          localStorage.setItem("last_search",JSON.stringify(searchData));
         }
         // this.$router.push({path:"/search_result_page",params:{recipes:this.recipes}})
       } catch (error) {
@@ -158,6 +169,9 @@ export default {
       }
     },
     async getLastSearch(){
+      // Retrieve the last search data as an array
+      const lastSearchData = JSON.parse(localStorage.getItem('last_search'));
+      console.log(lastSearchData)
       if (localStorage.getItem("username")==null){
         const search = localStorage.getItem("last_search")
         this.query = search[0]
@@ -201,6 +215,10 @@ export default {
   left: 0;
   z-index: -1;
 }
+.hero-caption{
+  display: flex;
+  flex-direction: column;
+}
 .hero-caption h2{
   
 font-size: 42px;
@@ -231,7 +249,7 @@ margin-bottom: 30px;
   color: #333;
   height: 70px;
 }
-.h-search-form button{
+.h-search-form .s_btn{
   right: 6px;
   height: 60px;
   border: none;
@@ -242,13 +260,28 @@ margin-bottom: 30px;
   position: absolute;
   width: 100px;
 }
-.h-search-form button:hover{
+.h-search-form .s_btn:hover{
   background-color: blue;
 }
 /* #input-group-cuisine{
   padding-top: 60px;
   align-self: start;
 } */
+#last_btn{
+  right: 6px;
+  height: 60px;
+  border: none;
+  color: #fff;
+  background-color: #5f3afc;
+  top: 5px;
+  border-radius: 50px;
+  position: absolute;
+  width: 100px;
+  
+}
+#last_btn:hover{
+  background-color: blue;
+}
 #options{
   
   align-items: center;

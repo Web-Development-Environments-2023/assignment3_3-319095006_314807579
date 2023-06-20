@@ -1,9 +1,11 @@
 <template>
-    <b-container>
+    <b-container  style="margin-bottom: 50px;" >
+      <div style="margin-top: 20px;">
         <h3>Favorite Recipes</h3>
-      <b-row>
-        <b-col v-for="r in recipes" :key="r.id">
-          <RecipePreview class="recipePreview" :recipe="r" />
+      </div>
+        <b-row v-for="r in recipes" :key="r.id">
+        <b-col>
+          <RecipePreview class="recipePreview" :recipe="r" style="width: 100%;" />
         </b-col>
       </b-row>
     </b-container>
