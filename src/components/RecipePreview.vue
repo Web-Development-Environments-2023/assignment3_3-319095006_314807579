@@ -30,16 +30,16 @@
             </b-col>
            
           <b-col md="2">
-            <div v-if="recipe.vegan==='true'" class="vegan">
+            <div v-if="recipe.vegan==='true' || recipe.vegan == true" class="vegan">
               <i class="bi bi-check2-circle">vegan</i>
             </div>
-            <div v-if="recipe.vegetarian==='true'" class="vegetarian">
+            <div v-if="recipe.vegetarian==='true' || recipe.vegetarian == true" class="vegetarian">
               <i class="bi bi-check2-circle">vegetarian</i>
             </div>
-            <div v-if="recipe.gluten_free ==='true'" class="glutenFree">
+            <div v-if="recipe.gluten_free ==='true' || recipe.gluten_free == true" class="glutenFree">
               <i class="bi bi-check2-circle">gluten free</i>
             </div>
-            <div v-if="recipe.viewed === 'true'" class="viewed">
+            <div v-if="recipe.viewed === 'true' || recipe.viewed == true" class="viewed">
               <i class="bi bi-eye-fill"></i>
             </div>
             <div >
@@ -237,6 +237,7 @@ export default {
 #icons{
   display: flex;
   flex-direction: column;
+  color: #fff;
 } 
 #inst{
   font-size: 1.3rem;

@@ -3,9 +3,7 @@
     <h1 class="title" >All recipes in one place</h1>
     <b-row class="container">
     <b-col style="width: 50%;">
-      <div>
-        <button @click="updateRecipes"> new random recipes</button>
-      </div>
+  
       <RecipePreviewList title="Random Recipes" class="RandomRecipes center" random="true"></RecipePreviewList>
     </b-col>
     <b-col style="width: 50%;">

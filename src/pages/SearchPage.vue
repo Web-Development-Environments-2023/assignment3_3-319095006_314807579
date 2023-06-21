@@ -22,7 +22,7 @@
                   >
                     <b-form-select
                       id="cuisine"
-                      v-model="selcted_cuisine"
+                      v-model="selected_cuisine"
                       :options="cuisine"
                     ></b-form-select>
                   </b-form-group>
@@ -34,7 +34,7 @@
                   >
                     <b-form-select
                       id="diet"
-                      v-model="selcted_diet"
+                      v-model="selected_diet"
                       :options="diet"
                     ></b-form-select>
                   </b-form-group>
@@ -46,7 +46,7 @@
                   >
                     <b-form-select
                       id="intolerances"
-                      v-model="selcted_intolerance"
+                      v-model="selected_intolerance"
                       :options="intolerances"
                     ></b-form-select>
                   </b-form-group>
@@ -90,8 +90,11 @@
                 </b-row>
               </b-row>
             </div>
-            </div>
+            <div v-if="not_found">
+              <h3>No recipes found</h3> 
           </div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -113,16 +116,17 @@ export default {
       diet:[],
       cuisine:[],
       intolerances:[],
-      selcted_cuisine: null,
+      selected_cuisine: null,
       selected_diet: null,
       selected_intolerance:null,
       num_options:[5,10,15],
-      selected_num:'',
+      selected_num:null,
       sort_option:['time','popularity'],
       selected_sort:null,
       selected_query:"",
       recipes: [],
-      searchData:[]
+      searchData:[],
+      not_found: false
     };
   },
   components: {
@@ -141,51 +145,58 @@ export default {
             params:{
               query:this.selected_query,
               number: this.selected_num,
-              cuisine:this.selcted_cuisine,
-              diet:this.selcted_diet,
+              cuisine:this.selected_cuisine,
+              diet:this.selected_diet,
               intolerances:this.selected_intolerance,
               sort:this.selected_sort
             }
           } 
         );
         const recipes = response.data;
+        if (recipes === "No recipes found"){
+          
+          this.not_found = true;
+          console.log(this.not_found)
+          return;
+
+        }
         this.recipes = [];
         this.recipes.push(...recipes);
         console.log(this.recipes)
         if (localStorage.getItem("username")!=null){
-          
+          const searchData = []
           searchData.push(this.selected_query)
           searchData.push(this.selected_num)
           searchData.push(this.selected_cuisine)
           searchData.push(this.selected_diet)
-          searchData.push(this.selcted_intolerance)
+          searchData.push(this.selected_intolerance)
           searchData.push(this.selected_sort)
           console.log(searchData)
           localStorage.setItem("last_search",JSON.stringify(searchData));
         }
-        // this.$router.push({path:"/search_result_page",params:{recipes:this.recipes}})
       } catch (error) {
         console.log(error);
       }
     },
     async getLastSearch(){
       // Retrieve the last search data as an array
-      const lastSearchData = JSON.parse(localStorage.getItem('last_search'));
-      console.log(lastSearchData)
-      if (localStorage.getItem("username")==null){
-        const search = localStorage.getItem("last_search")
-        this.query = search[0]
-        this.selected_num = search[1]
-        this.selcted_cuisine = search[2]
-        this.selcted_diet = search[3]
-        this.selected_intolerance = search[4]
-        this.selected_sort = search[5]
+      if (localStorage.getItem("username")!=null){
+        const lastSearchData = JSON.parse(localStorage.getItem('last_search'));
+        console.log(lastSearchData)
+        this.selected_query = lastSearchData[0]
+        this.selected_num = lastSearchData[1]
+        this.selected_cuisine = lastSearchData[2]
+        this.selected_diet = lastSearchData[3]
+        this.selected_intolerance = lastSearchData[4]
+        this.selected_sort = lastSearchData[5]
         this.search()
+
+      }
+    }
   
     }
 
-  }
-}
+  
 };
 
 

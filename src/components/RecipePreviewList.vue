@@ -5,9 +5,13 @@
       
     </h3>
     <div v-if="recipes">
+      <div v-if="random==='true'">
+        <button @click="updateRecipes"> new random recipes</button>
+      </div>
     <div v-for="r in recipes" :key="r.id" >
       <RecipePreview class="recipePreview" :recipe="r" />
     </div>
+
   </div>
   </b-container>
 </template>
@@ -32,16 +36,16 @@ export default {
       default: "false"
     }
   },
-  mounted() {
-    if (this.random==="true") {
-      console.log("random");
-      this.updateRecipes();
-      console.log(this.recipes)
-    }
-    else{
-      this.getLastViewedRecipes();
-    }
-  },
+  // mounted() {
+  //   if (this.random==="true") {
+  //     console.log("random");
+  //     this.updateRecipes();
+  //     console.log(this.recipes)
+  //   }
+  //   else{
+  //     this.getLastViewedRecipes();
+  //   }
+  // },
 
   data() {
     return {
