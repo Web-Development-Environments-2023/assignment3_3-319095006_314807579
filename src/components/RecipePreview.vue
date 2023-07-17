@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-card no-body class="overflow-hidden" style="max-width: 600px;">
-      
+    <b-card no-body class="overflow-hidden" style="max-width: 600px; max-height: 300px;">
+
         <b-row no-gutters id="row">
           
             <b-col md="6"  class="col">
@@ -19,7 +19,7 @@
             class="recipe-preview"
           >
               <b-card-body :title="recipe.title">
-                <b-card-text>
+                <b-card-text style="font-size: 2px;">
                   <div id="inst">
                     <li>{{ recipe.readyInMinutes }} minutes</li>
                     <li>{{ recipe.popularity }} likes</li>
@@ -50,7 +50,7 @@
           </b-col>
         </b-row>
       
-      
+
     </b-card>
   </div>
 
@@ -162,25 +162,24 @@ export default {
 <style scoped>
 .recipe-preview {
   display: inline-block;
-  width: 90%;
+  width: 100%;
   height: 100%;
-  position: relative;
-  margin: 10px 10px;
+  /* position: relative; */
+  /* margin: 10px 10px 10px 10px; */
 }
 .recipe-preview > .recipe-body {
   width: 100%;
-  height: 200px;
+  height: 100%;
   position: relative;
 }
 
 .recipe-preview .recipe-body .recipe-image {
-  margin-left: auto;
+  /* margin-left: auto;
   margin-right: auto;
   margin-top: auto;
-  margin-bottom: auto;
+  margin-bottom: auto; */
   display: block;
   width: 98%;
-  height: auto;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
@@ -188,19 +187,20 @@ export default {
 
 .recipe-preview .recipe-footer {
   width: 100%;
-  height: 50%;
+  height: 1%;
   overflow: hidden;
+
 }
 
 .recipe-preview .recipe-footer .recipe-title {
-  padding: 10px 10px;
+  /* padding: 10px 10px; */
   width: 100%;
-  font-size: 12pt;
+  font-size: 2pt;
   text-align: left;
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: hidden;
   -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; 
 }
 
 .recipe-preview .recipe-footer ul.recipe-overview {

@@ -2,16 +2,39 @@
   <div class="container">
     <div v-if="recipe">
       <div class="recipe-header mt-3 mb-4">
-        <h1>{{ recipe.title }}</h1>
-        <img :src="recipe.image"  />
+        
+      
+        <b-row >
+          <b-col cols="6" style="align-items:;">
+            <h1>{{ recipe.title }}</h1>
+            Ready in {{ recipe.readyInMinutes }} minutes
+            <span v-if="this.fromRoute!='/users/myRecipes'">, {{ recipe.popularity }} likes</span>
+            <div v-if="recipe.vegan==='true' || recipe.vegan == true" class="vegan">
+              <i class="bi bi-check2-circle" style="color: aliceblue;">vegan</i>
+            </div>
+            <div v-if="recipe.vegetarian==='true' || recipe.vegetarian == true" class="vegetarian">
+              <i class="bi bi-check2-circle">vegetarian</i>
+            </div>
+            <div v-if="recipe.gluten_free ==='true' || recipe.gluten_free == true" class="glutenFree">
+              <i class="bi bi-check2-circle">gluten free</i>
+            </div>
+            <div v-if="recipe.viewed === 'true' || recipe.viewed == true" class="viewed">
+              <i class="bi bi-eye-fill"></i>
+            </div>
+
+          </b-col>
+          <b-col cols="4">
+            <div style="align-content: right: inherit;;">
+              <img :src="recipe.image" style="width:90%;"/>
+            </div>
+          </b-col>
+        </b-row>
+        
       </div>
       <div class="recipe-body">
         <div class="wrapper">
           <div class="wrapped">
-            <div class="mb-3">
-              <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div v-if="this.fromRoute!='/users/myRecipes'">Likes: {{ recipe.popularity }} likes</div>
-            </div>
+           
             Ingredients:
             <ul>
               <li
@@ -32,7 +55,12 @@
               <!-- <li v-for="s in recipe.instructions" :key="s.number">
                 {{ s.step }}
               </li> -->
-              {{ recipe.instructions }}
+              <span v-if="this.fromRoute==='/users/myRecipes'">
+                {{ recipe.instructions }}
+              </span>
+              <span v-else>
+                {{ recipe.new_in }}
+              </span>
             </ol>
           </div>
         </div>
@@ -47,11 +75,13 @@
 </template>
 
 <script>
+import he from "he";
 export default {
   data() {
     return {
       recipe: null,
-      fromRoute: this.$route.params.from
+      fromRoute: this.$route.params.from,
+      new_inst: null
     };
   },
   computed: {
@@ -107,7 +137,12 @@ export default {
           readyInMinutes,
           image,
           title,
-          meals
+          meals,
+          vegan,
+          vegetarian,
+          gluten_free,
+          viewed,
+          favorite
         } = response.data;
 
         // let _instructions = analyzedInstructions
@@ -116,17 +151,29 @@ export default {
         //     return fstep.steps;
         //   })
         //   .reduce((a, b) => [...a, ...b], []);
+        if (this.fromRoute != "/users/myRecipes") {
+           this.new_inst= document.createElement("new_inst");
+            this.new_inst.innerHTML=instructions;
+            this.new_inst= this.new_inst.innerText;
+        }
+        var new_in= this.new_inst
+     
 
         let _recipe = {
+          new_in,
           instructions,
-          // _instructions,
           // analyzedInstructions,
           ingredients,
           popularity,
           readyInMinutes,
           image,
           title,
-          meals
+          meals,
+          vegan,
+          vegetarian,
+          gluten_free,
+          viewed,
+          favorite
         };
 
         this.recipe = _recipe;

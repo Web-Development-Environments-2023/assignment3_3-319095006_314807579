@@ -3,12 +3,11 @@
     <h1 class="title" >All recipes in one place</h1>
     <b-row class="container">
     <b-col style="width: 50%;">
-  
       <RecipePreviewList title="Random Recipes" class="RandomRecipes center" random="true"></RecipePreviewList>
     </b-col>
     <b-col style="width: 50%;">
       <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to vue this</router-link>
-        <RecipePreviewList style="width: 100%; height: 100%;"
+        <LastViewed
           title="Last Viewed Recipes"
           random="false"
           :class="{
@@ -17,7 +16,7 @@
             center: true
           }"
           disabled
-        ></RecipePreviewList >
+        ></LastViewed >
     </b-col>
   </b-row>
 </div>
@@ -25,9 +24,11 @@
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList";
+import LastViewed from "../components/LastViewed";
 export default {
   components: {
-    RecipePreviewList
+    RecipePreviewList,
+    LastViewed
   }
   
 };

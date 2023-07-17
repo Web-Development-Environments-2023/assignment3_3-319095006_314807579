@@ -217,6 +217,8 @@ export default {
                     instructions:this.form.instructions ,
                     meals:this.form.meals 
                 }, {withCredentials: true});
+                this.$root.toast("Recipe saved successfully", "Recipe saved successfully", "success");
+
             }
             catch(err){
                 console.log(err.response);

@@ -118,12 +118,12 @@ export default {
   z-index: 1000;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  // justify-content: space-between;
   background: transparent;
-  padding: 28px 12%;
+  // padding: 10px 2%;
   transition: all .50 ease;
   background: var(--bg-color);
-  
+  padding-top: 20px;
 }
 
 .navbar{

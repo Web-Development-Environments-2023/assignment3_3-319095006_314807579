@@ -2,17 +2,11 @@
   <b-container>
     <h3>
       {{ title }}:
-      
     </h3>
-    <div v-if="recipes">
-      <div v-if="random==='true'">
-        <button @click="updateRecipes"> new random recipes</button>
+      <button @click="updateRecipes"> new random recipes</button>
+      <div v-for="r in recipes" :key="r.id" >
+        <RecipePreview class="recipePreview" :recipe="r" />
       </div>
-    <div v-for="r in recipes" :key="r.id" >
-      <RecipePreview class="recipePreview" :recipe="r" />
-    </div>
-
-  </div>
   </b-container>
 </template>
 
@@ -30,26 +24,27 @@ export default {
       type: String,
       required: true
     },
-    random: {
-      type: String,
-      required: false,
-      default: "false"
-    }
+    // random: {
+    //   type: String,
+    //   required: false,
+    //   default: "false"
+    // }
   },
-  // mounted() {
-  //   if (this.random==="true") {
-  //     console.log("random");
-  //     this.updateRecipes();
-  //     console.log(this.recipes)
-  //   }
-  //   else{
-  //     this.getLastViewedRecipes();
-  //   }
-  // },
+  mounted() {
+    // if (this.random==="true") {
+      // console.log("random");
+      this.updateRecipes();
+      console.log(this.recipes)
+    // }
+    // else{
+    //   this.getLastViewedRecipes();
+    // }
+  },
 
   data() {
     return {
-      recipes: []
+      recipes: [],
+      // lastViewed: []
     };
   },
   // mounted() {
@@ -68,27 +63,9 @@ export default {
       } catch (error) {
         console.log(error);
         this.recipes=[]
-      }
-    },
-    async getLastViewedRecipes(){
-      try {
-        const username = localStorage.getItem("username");
-        const response = await this.axios.get(
-          this.$root.store.server_domain + "/users/lastViewed",
-          {
-            params:{
-              username: username
-            }
-          }
-        );
-        console.log(response.data)
-        const recipes = response.data;
-        this.recipes = [];
-        this.recipes.push(...recipes);
-      } catch (error) {
-        console.log(error);
-      }
     }
+    },
+
   }
 };
 </script>
