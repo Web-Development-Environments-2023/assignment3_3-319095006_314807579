@@ -152,15 +152,16 @@ export default {
             }
           } 
         );
+        this.recipes = [];
         const recipes = response.data;
         if (recipes === "No recipes found"){
           
           this.not_found = true;
-          console.log(this.not_found)
+          console.log("not found", this.not_found)
           return;
 
         }
-        this.recipes = [];
+        
         this.recipes.push(...recipes);
         console.log(this.recipes)
         if (localStorage.getItem("username")!=null){
@@ -172,7 +173,7 @@ export default {
           searchData.push(this.selected_intolerance)
           searchData.push(this.selected_sort)
           console.log(searchData)
-          localStorage.setItem("last_search",JSON.stringify(searchData));
+          sessionStorage.setItem("last_search",JSON.stringify(searchData));
         }
       } catch (error) {
         console.log(error);
@@ -181,7 +182,7 @@ export default {
     async getLastSearch(){
       // Retrieve the last search data as an array
       if (localStorage.getItem("username")!=null){
-        const lastSearchData = JSON.parse(localStorage.getItem('last_search'));
+        const lastSearchData = JSON.parse(sessionStorage.getItem('last_search'));
         console.log(lastSearchData)
         this.selected_query = lastSearchData[0]
         this.selected_num = lastSearchData[1]

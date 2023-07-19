@@ -19,7 +19,7 @@
             class="recipe-preview"
           >
               <b-card-body :title="recipe.title">
-                <b-card-text style="font-size: 2px;">
+                <b-card-text >
                   <div id="inst">
                     <li>{{ recipe.readyInMinutes }} minutes</li>
                     <li>{{ recipe.popularity }} likes</li>
@@ -257,6 +257,17 @@ export default {
   background-color: #222327;
  
   
+}
+
+h4.card-title{
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+#inst {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  color: #fff;
 }
 
 
